@@ -92,9 +92,39 @@
 - Diện tích tam giác: $S = \frac{1}{2}ab\sin C$"></textarea>
     <br />
 
+    <button onclick="toggleHelp()">📘 Gợi ý ký hiệu</button>
+    <div id="helpBox" style="display: none; margin-top: 10px; border: 1px solid #ccc; padding: 10px;">
+        <strong>Ký hiệu thường dùng:</strong>
+        <ul>
+            <li><code>$a^2$</code> → a bình phương</li>
+            <li><code>$\frac{1}{2}$</code> → một phần hai</li>
+            <li><code>$\sqrt{x}$</code> → căn bậc hai</li>
+            <li><code>$\sqrt[3]{x}$</code> → căn bậc ba</li>
+            <li><code>$(a+b)^2 = a^2 + 2ab + b^2$</code> → hằng đẳng thức</li>
+            <li><code>$f'(x)$</code> → đạo hàm</li>
+            <li><code>$\lim_{x \to 0}$</code> → giới hạn x → 0</li>
+            <li><code>$f'(x) = \lim_{h \to 0} \frac{f(x+h)-f(x)}{h}$</code> → định nghĩa đạo hàm</li>
+            <li><code>$\int_a^b f(x)dx$</code> → tích phân từ a đến b</li>
+            <li><code>$x \in \mathbb{R}$</code> → x thuộc tập số thực</li>
+            <li><code>$x \notin A$</code> → x không thuộc tập A</li>
+            <li><code>$A \cap B$</code> → giao của A và B</li>
+            <li><code>$A \cup B$</code> → hợp của A và B</li>
+            <li><code>$x \rightarrow \infty$</code> → x tiến tới vô cực</li>
+            <li><code>$\triangle ABC$</code> → tam giác ABC</li>
+            <li><code>$\angle A$</code> → góc A</li>
+            <li><code>$AB \perp CD$</code> → AB vuông góc CD</li>
+            <li><code>$AB \parallel CD$</code> → AB song song CD</li>
+        </ul>
+    </div>
+
     <div id="output"></div>
 
     <script>
+        function toggleHelp() {
+            const box = document.getElementById('helpBox');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
         function convertToHTML(text) {
             const lines = text.split('\n');
             let html = '<ul>';
