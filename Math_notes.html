@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghi chú Toán học</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #aaa;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        button {
+            padding: 8px 16px;
+            font-size: 16px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #aaa;
+            white-space: pre-wrap;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+            color: #0066cc;
+        }
+        .subnote {
+            margin-top: 4px;
+            margin-left: 10px;
+            font-style: italic;
+            color: #555;
+        }
+        body.dark {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark textarea, 
+        body.dark #output {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border-color: #555;
+        }
+        body.dark li {
+            color: #90caf9;
+        }
+        body.dark .subnote {
+            color: #aaa;
+        }
+        body.dark button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+        }
+    </style>
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+    <h1>Ghi chú Toán học</h1>
+    <button onclick="toggleTheme()">🌗 Đổi nền Sáng/Tối</button>
+    <button onclick="handleSave()">💾 Lưu và xem</button>
+    <p><strong>Mẹo:</strong> Gạch đầu dòng bằng <code>-</code>, <code>*</code> hoặc <code>•</code>.  
+        Ghi chú phụ nằm ngay dưới công thức.</p>
+    <textarea id="noteInput" placeholder="Ví dụ:
+- Định lý Pythagore: $a^2 + b^2 = c^2$
+Áp dụng khi tam giác vuông, cạnh c là cạnh huyền.
+
+- Diện tích tam giác: $S = \frac{1}{2}ab\sin C$"></textarea>
+    <br />
+
+    <div id="output"></div>
+
+    <script>
+        function convertToHTML(text) {
+            const lines = text.split('\n');
+            let html = '<ul>';
+            let inlist = false;
+
+            for (let i = 0; i < lines.length; ++i) {
+                const trimmed = lines[i].trim();
+
+                if (/^[-*•]/.test(trimmed)) {
+                html += `<li>${trimmed.slice(1).trim()}`;
+                    const nextLine = lines[i + 1]?.trim();
+                    if (nextLine && !/^[-*•]/.test(nextLine)) {
+                        html += `<div style="margin-top: 4px; margin-left: 10px; font-style: italic; color: #555;">${nextLine}</div>`;
+                        ++i;
+                    }
+                    html += `</li>`;
+                } else if (trimmed) {
+                    html += `<li style="list-style-type:none">${trimmed}</li>`;
+                }
+            }
+            html += '</ul>';
+            return html;
+        }
+
+        function handleSave() {
+            const text = document.getElementById('noteInput').value;
+
+            localStorage.setItem('mathNote', text);
+
+            const output = document.getElementById('output');
+            output.innerHTML = convertToHTML(text);
+
+            if (window.MathJax) {
+                MathJax.typeset();
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        window.onload = function () {
+            // Load ghi chú
+            const saved = localStorage.getItem('mathNote');
+            if (saved) {
+                document.getElementById('noteInput').value = saved;
+                document.getElementById('output').innerHTML = convertToHTML(saved);
+                if (window.MathJax) {
+                    MathJax.typeset();
+                }
+            }
+
+            // Load theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+            }
+        }
+    </script>
+</body>
+</html>
