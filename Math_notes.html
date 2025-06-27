@@ -1,189 +1,209 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Ghi chú Toán học</title>
     <style>
         body {
-            font-family: sans-serif;
-            margin: 20px;
-            transition: background-color 0.3s, color 0.3s;
+        font-family: sans-serif;
+        margin: 20px;
+        position: relative;
+        overflow: hidden;
+        background-color: #fefefe;
+        transition: background-color 0.3s, color 0.3s;
         }
+
+        .background {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        background-image: url('math_bg_light.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        filter: blur(6px) brightness(1);
+        opacity: 0.35;
+        animation: drift 60s linear infinite;
+        transition: filter 0.5s, opacity 0.5s, background-image 0.5s;
+        }
+
+        @keyframes drift {
+        0% { transform: scale(1.05) translate(0, 0); }
+        50% { transform: scale(1.1) translate(-10px, -10px); }
+        100% { transform: scale(1.05) translate(0, 0); }
+        }
+
+        body.dark .background {
+        background-image: url('math_bg_dark.jpg');
+        filter: blur(10px) brightness(0.25);
+        opacity: 0.5;
+        }
+
+        h1 {
+        margin-top: 0;
+        }
+
+        textarea, #output {
+        width: 100%;
+        font-size: 16px;
+        padding: 8px;
+        border: 1px solid #aaa;
+        border-radius: 6px;
+        transition: background-color 0.3s, color 0.3s;
+        }
+
         textarea {
-            width: 100%;
-            height: 150px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #aaa;
-            transition: background-color 0.3s, color 0.3s;
+        height: 150px;
+        margin-bottom: 10px;
         }
+
         button {
-            padding: 8px 16px;
-            font-size: 16px;
-            margin-right: 10px;
-            cursor: pointer;
+        padding: 8px 16px;
+        font-size: 16px;
+        margin-right: 10px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,0.8);
+        transition: background-color 0.3s;
         }
+
         #output {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #aaa;
-            white-space: pre-wrap;
-            transition: background-color 0.3s, color 0.3s;
+        margin-top: 20px;
+        white-space: pre-wrap;
+        background-color: rgba(255,255,255,0.8);
+        backdrop-filter: blur(2px);
+        border-radius: 8px;
         }
+
         ul {
-            padding-left: 20px;
+        padding-left: 20px;
         }
+
         li {
-            margin-bottom: 8px;
-            color: #0066cc;
+        margin-bottom: 8px;
+        color: #0066cc;
         }
+
         .subnote {
-            margin-top: 4px;
-            margin-left: 10px;
-            font-style: italic;
-            color: #555;
+        margin-top: 4px;
+        margin-left: 10px;
+        font-style: italic;
+        color: #555;
         }
+
         body.dark {
-            background-color: #121212;
-            color: #e0e0e0;
+        color: #e0e0e0;
         }
-        body.dark textarea, 
+
+        body.dark textarea,
         body.dark #output {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            border-color: #555;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ffffff;
+        border-color: #555;
+        backdrop-filter: blur(3px);
         }
+
         body.dark li {
-            color: #90caf9;
+        color: #90caf9;
         }
+
         body.dark .subnote {
-            color: #aaa;
+        color: #aaa;
         }
+
         body.dark button {
-            background-color: #333;
-            color: #fff;
-            border: none;
+        background-color: rgba(50, 50, 50, 0.8);
+        color: #fff;
+        border: none;
+        }
+
+        body.dark h1 {
+        color: #bbdefb;
+        }
+
+        body.dark p, body.dark code {
+        color: #ccc;
         }
     </style>
 
     <!-- MathJax -->
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$']]
-            },
-            svg: { fontCache: 'global' }
+        tex: { inlineMath: [['$', '$']] },
+        svg: { fontCache: 'global' }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
+    <div class="background"></div>
+
     <h1>Ghi chú Toán học</h1>
     <button onclick="toggleTheme()">🌗 Đổi nền Sáng/Tối</button>
     <button onclick="handleSave()">💾 Lưu và xem</button>
-    <p><strong>Mẹo:</strong> Gạch đầu dòng bằng <code>-</code>, <code>*</code> hoặc <code>•</code>.  
-        Ghi chú phụ nằm ngay dưới công thức.</p>
+    <p><strong>Mẹo:</strong> Gạch đầu dòng bằng <code>-</code>, <code>*</code> hoặc <code>•</code>. Ghi chú phụ nằm ngay dưới công thức.</p>
+
     <textarea id="noteInput" placeholder="Ví dụ:
-- Định lý Pythagore: $a^2 + b^2 = c^2$
-Áp dụng khi tam giác vuông, cạnh c là cạnh huyền.
+    - Định lý Pythagore: $a^2 + b^2 = c^2$
+    Áp dụng khi tam giác vuông, cạnh c là cạnh huyền.
 
-- Diện tích tam giác: $S = \frac{1}{2}ab\sin C$"></textarea>
+    - Diện tích tam giác: $S = \frac{1}{2}ab\sin C$"></textarea>
     <br />
-
-    <button onclick="toggleHelp()">📘 Gợi ý ký hiệu</button>
-    <div id="helpBox" style="display: none; margin-top: 10px; border: 1px solid #ccc; padding: 10px;">
-        <strong>Ký hiệu thường dùng:</strong>
-        <ul>
-            <li><code>$a^2$</code> → a bình phương</li>
-            <li><code>$\frac{1}{2}$</code> → một phần hai</li>
-            <li><code>$\sqrt{x}$</code> → căn bậc hai</li>
-            <li><code>$\sqrt[3]{x}$</code> → căn bậc ba</li>
-            <li><code>$(a+b)^2 = a^2 + 2ab + b^2$</code> → hằng đẳng thức</li>
-            <li><code>$f'(x)$</code> → đạo hàm</li>
-            <li><code>$\lim_{x \to 0}$</code> → giới hạn x → 0</li>
-            <li><code>$f'(x) = \lim_{h \to 0} \frac{f(x+h)-f(x)}{h}$</code> → định nghĩa đạo hàm</li>
-            <li><code>$\int_a^b f(x)dx$</code> → tích phân từ a đến b</li>
-            <li><code>$x \in \mathbb{R}$</code> → x thuộc tập số thực</li>
-            <li><code>$x \notin A$</code> → x không thuộc tập A</li>
-            <li><code>$A \cap B$</code> → giao của A và B</li>
-            <li><code>$A \cup B$</code> → hợp của A và B</li>
-            <li><code>$x \rightarrow \infty$</code> → x tiến tới vô cực</li>
-            <li><code>$\triangle ABC$</code> → tam giác ABC</li>
-            <li><code>$\angle A$</code> → góc A</li>
-            <li><code>$AB \perp CD$</code> → AB vuông góc CD</li>
-            <li><code>$AB \parallel CD$</code> → AB song song CD</li>
-        </ul>
-    </div>
-
     <div id="output"></div>
 
     <script>
-        function toggleHelp() {
-            const box = document.getElementById('helpBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function convertToHTML(text) {
-            const lines = text.split('\n');
-            let html = '<ul>';
-            let inlist = false;
-
-            for (let i = 0; i < lines.length; ++i) {
-                const trimmed = lines[i].trim();
-
-                if (/^[-*•]/.test(trimmed)) {
-                html += `<li>${trimmed.slice(1).trim()}`;
-                    const nextLine = lines[i + 1]?.trim();
-                    if (nextLine && !/^[-*•]/.test(nextLine)) {
-                        html += `<div style="margin-top: 4px; margin-left: 10px; font-style: italic; color: #555;">${nextLine}</div>`;
-                        ++i;
-                    }
-                    html += `</li>`;
-                } else if (trimmed) {
-                    html += `<li style="list-style-type:none">${trimmed}</li>`;
-                }
-            }
-            html += '</ul>';
-            return html;
+        function toggleTheme() {
+        const isDark = document.body.classList.toggle("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
         }
 
         function handleSave() {
-            const text = document.getElementById('noteInput').value;
-
-            localStorage.setItem('mathNote', text);
-
-            const output = document.getElementById('output');
-            output.innerHTML = convertToHTML(text);
-
-            if (window.MathJax) {
-                MathJax.typeset();
-            }
+        const text = document.getElementById("noteInput").value;
+        localStorage.setItem("mathNote", text);
+        const output = document.getElementById("output");
+        output.innerHTML = convertToHTML(text);
+        if (window.MathJax) MathJax.typeset();
         }
 
-        function toggleTheme() {
-            const isDark = document.body.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        function convertToHTML(text) {
+        const lines = text.split("\n");
+        let html = "<ul>";
+        for (let i = 0; i < lines.length; ++i) {
+            const trimmed = lines[i].trim();
+            if (/^[-*•]/.test(trimmed)) {
+            html += `<li>${trimmed.slice(1).trim()}`;
+            const nextLine = lines[i + 1]?.trim();
+            if (nextLine && !/^[-*•]/.test(nextLine)) {
+                html += `<div class="subnote">${nextLine}</div>`;
+                ++i;
+            }
+            html += "</li>";
+            } else if (trimmed) {
+            html += `<li style="list-style-type:none">${trimmed}</li>`;
+            }
+        }
+        html += "</ul>";
+        return html;
         }
 
         window.onload = function () {
-            // Load ghi chú
-            const saved = localStorage.getItem('mathNote');
-            if (saved) {
-                document.getElementById('noteInput').value = saved;
-                document.getElementById('output').innerHTML = convertToHTML(saved);
-                if (window.MathJax) {
-                    MathJax.typeset();
-                }
-            }
-
-            // Load theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-            }
+        const saved = localStorage.getItem("mathNote");
+        if (saved) {
+            document.getElementById("noteInput").value = saved;
+            document.getElementById("output").innerHTML = convertToHTML(saved);
+            if (window.MathJax) MathJax.typeset();
         }
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark");
+        }
+        };
     </script>
 </body>
 </html>
