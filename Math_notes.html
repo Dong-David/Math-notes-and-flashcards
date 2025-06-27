@@ -187,34 +187,116 @@
     <div id="output"></div>
 
     <button onclick="toggleHelp()">📘 Gợi ý ký hiệu</button>
-    <div id="helpBox" style="display: none; margin-top: 10px; border: 1px solid #ccc; padding: 10px;">
+    <div id="helpBox" style="
+        display: none;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        max-height: 300px;          /* Giới hạn chiều cao */
+        overflow-y: auto;           /* Tự động cuộn dọc khi tràn */
+        background-color: #f3f3f3;
+        border-radius: 6px;
+    ">
         <strong>Ký hiệu thường dùng:</strong>
-        <ul>
-        <li><code>$a^2$</code> → a bình phương</li>
-        <li><code>$\frac{1}{2}$</code> → một phần hai</li>
-        <li><code>$\sqrt{x}$</code> → căn bậc hai</li>
-        <li><code>$\sqrt[3]{x}$</code> → căn bậc ba</li>
-        <li><code>$(a+b)^2 = a^2 + 2ab + b^2$</code> → hằng đẳng thức</li>
-        <li><code>$f'(x)$</code> → đạo hàm</li>
-        <li><code>$\lim_{x \to 0}$</code> → giới hạn x → 0</li>
-        <li><code>$f'(x) = \lim_{h \to 0} \frac{f(x+h)-f(x)}{h}$</code> → định nghĩa đạo hàm</li>
-        <li><code>$\int_a^b f(x)dx$</code> → tích phân từ a đến b</li>
-        <li><code>$x \in \mathbb{R}$</code> → x thuộc tập số thực</li>
-        <li><code>$x \notin A$</code> → x không thuộc tập A</li>
-        <li><code>$A \cap B$</code> → giao của A và B</li>
-        <li><code>$A \cup B$</code> → hợp của A và B</li>
-        <li><code>$x \rightarrow \infty$</code> → x tiến tới vô cực</li>
-        <li><code>$\triangle ABC$</code> → tam giác ABC</li>
-        <li><code>$\angle A$</code> → góc A</li>
-        <li><code>$AB \perp CD$</code> → AB vuông góc CD</li>
-        <li><code>$AB \parallel CD$</code> → AB song song CD</li>
-        </ul>
+        <details open>
+            <summary>📐 I. Đại số – Giải tích</summary>
+            <ul>
+                <li><code>$a^2$</code> → a bình phương</li>
+                <li><code>$\sqrt{x}$</code> → căn bậc hai của x</li>
+                <li><code>$\sqrt[3]{x}$</code> → căn bậc ba của x</li>
+                <li><code>$(a + b)^2 = a^2 + 2ab + b^2$</code> → hằng đẳng thức</li>
+                <li><code>$f(x)$</code> → hàm số f tại x</li>
+                <li><code>$f'(x)$</code> → đạo hàm của f</li>
+                <li><code>$\lim_{x \to a} f(x)$</code> → giới hạn của f(x) khi x → a</li>
+                <li><code>$\int_a^b f(x)\,dx$</code> → tích phân từ a đến b</li>
+                <li><code>$\frac{dy}{dx}$</code> → đạo hàm vi phân</li>
+                <li><code>$x \in \mathbb{R}$</code> → x thuộc tập số thực</li>
+                <li><code>$x \notin A$</code> → x không thuộc tập A</li>
+            </ul>
+        </details>
+
+        <details>
+            <summary>🔢 II. Tổ hợp – Rời rạc</summary>
+            <ul>
+                <li><code>$\binom{n}{k}$</code> → tổ hợp C(n, k)</li>
+                <li><code>$n!$</code> → giai thừa</li>
+                <li><code>$2^n$</code> → số tập con</li>
+                <li><code>$\sum_{i=1}^n a_i$</code> → tổng từ i=1 đến n</li>
+                <li><code>$\prod_{i=1}^n a_i$</code> → tích từ i=1 đến n</li>
+                <li><code>$P(A)$</code> → tập tất cả tập con của A</li>
+                <li><code>$A \cup B$</code> → hợp của A và B</li>
+                <li><code>$A \cap B$</code> → giao của A và B</li>
+                <li><code>$A \setminus B$</code> → A trừ B</li>
+            </ul>
+        </details>
+        
+        <details>
+            <summary>🧠 III. Logic – Mệnh đề</summary>
+            <ul>
+                <li><code>$p \Rightarrow q$</code> → nếu p thì q</li>
+                <li><code>$p \Leftrightarrow q$</code> → p tương đương q</li>
+                <li><code>$\neg p$</code> → phủ định p</li>
+                <li><code>$p \land q$</code> → p và q</li>
+                <li><code>$p \lor q$</code> → p hoặc q</li>
+                <li><code>$T$, $F$</code> → Đúng, Sai</li>
+            </ul>
+        </details>
+            
+        <details>
+            <summary>🔗 IV. Tập hợp</summary>
+            <ul>
+                <li><code>$x \in A$</code> → x thuộc tập A</li>
+                <li><code>$x \notin A$</code> → x không thuộc A</li>
+                <li><code>$A \subset B$</code> → A là tập con của B</li>
+                <li><code>$A \subseteq B$</code> → A là tập con hoặc bằng B</li>
+                <li><code>$A \times B$</code> → tích Descartes</li>
+                <li><code>$\forall x \in A$</code> → với mọi x thuộc A</li>
+                <li><code>$\exists x$</code> → tồn tại x</li>
+            </ul>
+        </details>
+            
+        <details>
+            <summary>🧮 V. Hàm – Ánh xạ</summary>
+            <ul>
+                <li><code>$f: A \to B$</code> → ánh xạ từ A đến B</li>
+                <li><code>$f^{-1}(y)$</code> → giá trị ngược của y</li>
+                <li><code>$f \circ g$</code> → hàm hợp</li>
+            </ul>
+        </details>
+            
+        <details>
+            <summary>📊 VI. Đồ thị – Tin học</summary>
+            <ul>
+                <li><code>$G = (V, E)$</code> → đồ thị G</li>
+                <li><code>$deg(v)$</code> → bậc đỉnh v</li>
+                <li><code>$u \sim v$</code> → u và v kề nhau</li>
+                <li><code>$u \leftrightarrow v$</code> → có đường đi từ u tới v</li>
+                <li><code>$C_n$</code> → chu trình n đỉnh</li>
+                <li><code>$K_n$</code> → đồ thị đầy đủ</li>
+                <li><code>$T$</code> → cây</li>
+            </ul>
+        </details>
+            
+        <details>
+            <summary>📐 VII. Hình học</summary>
+            <ul>
+                <li><code>$\triangle ABC$</code> → tam giác ABC</li>
+                <li><code>$\angle A$</code> → góc A</li>
+                <li><code>$AB \perp CD$</code> → vuông góc</li>
+                <li><code>$AB \parallel CD$</code> → song song</li>
+            </ul>
+        </details>
     </div>
 
     <script>
         function toggleHelp() {
             const box = document.getElementById('helpBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+            const isShown = box.style.display === 'none';
+            box.style.display = isShown ? 'block' : 'none';
+
+            if (isShown && window.MathJax) {
+                MathJax.typeset();
+            }
         }
 
         function toggleTheme() {
