@@ -19,7 +19,6 @@
     <!-- math.js -->
     <script src="https://cdn.jsdelivr.net/npm/mathjs@11/lib/browser/math.js"></script>
 </head>
-
 <body>
     <div class="background"></div>
 
@@ -60,244 +59,106 @@
             <summary>📐 I. Đại số – Giải tích <small>(bình phương, căn, đạo hàm, tích phân...)</small></summary>
             <ul>
                 <li><code>$a^2$</code> → a bình phương</li>
-                <li><code>$\sqrt{x}$</code> → căn bậc hai của x</li>
-                <li><code>$\sqrt[3]{x}$</code> → căn bậc ba của x</li>
+                <li><code>$\sqrt{x}$</code>, <code>$\sqrt[3]{x}$</code> → căn bậc hai, ba</li>
                 <li><code>$(a + b)^2 = a^2 + 2ab + b^2$</code> → hằng đẳng thức</li>
-                <li><code>$f(x)$</code> → hàm số f tại x</li>
-                <li><code>$f'(x)$</code> → đạo hàm của f</li>
-                <li><code>$\lim_{x \to a} f(x)$</code> → giới hạn của f(x) khi x → a</li>
-                <li><code>$\int_a^b f(x)\,dx$</code> → tích phân từ a đến b</li>
-                <li><code>$\frac{dy}{dx}$</code> → đạo hàm vi phân</li>
-                <li><code>$x \in \mathbb{R}$</code> → x thuộc tập số thực</li>
-                <li><code>$x \notin A$</code> → x không thuộc tập A</li>
-                <li><code>$\log x$</code> → logarit cơ số 10 của x</li>
-                <li><code>$\ln x$</code> → logarit tự nhiên</li>
+                <li><code>$f(x)$</code>, <code>$f'(x)$</code> → hàm số và đạo hàm</li>
+                <li><code>$\lim_{x \to a} f(x)$</code> → giới hạn</li>
+                <li><code>$\int_a^b f(x)\,dx$</code> → tích phân</li>
+                <li><code>$\frac{dy}{dx}$</code> → vi phân</li>
+                <li><code>$\log x$</code>, <code>$\ln x$</code> → logarit</li>
                 <li><code>$e^x$</code> → hàm mũ</li>
-                <li><code>$\sin x$, $\cos x$, $\tan x$</code> → các hàm lượng giác</li>
+                <li><code>$\sin x$, $\cos x$, $\tan x$</code> → lượng giác</li>
                 <li><code>$|x|$</code> → giá trị tuyệt đối</li>
             </ul>
         </details>
-
+        
         <details>
             <summary>🔢 II. Tổ hợp – Rời rạc <small>(giai thừa, tổ hợp, tổng, giao – hợp)</small></summary>
             <ul>
                 <li><code>$\binom{n}{k}$</code> → tổ hợp C(n, k)</li>
                 <li><code>$n!$</code> → giai thừa</li>
                 <li><code>$2^n$</code> → số tập con</li>
-                <li><code>$\sum_{i=1}^n a_i$</code> → tổng từ i=1 đến n</li>
-                <li><code>$\prod_{i=1}^n a_i$</code> → tích từ i=1 đến n</li>
+                <li><code>$\sum_{i=1}^n a_i$</code>, <code>$\prod_{i=1}^n a_i$</code> → tổng, tích</li>
                 <li><code>$P(A)$</code> → tập tất cả tập con của A</li>
-                <li><code>$A \cup B$</code> → hợp của A và B</li>
-                <li><code>$A \cap B$</code> → giao của A và B</li>
-                <li><code>$A \setminus B$</code> → A trừ B</li>
-                <li><code>$n^k$</code> → số chỉnh hợp lặp</li>
-                <li><code>$[x]$</code> → phần nguyên của x</li>
-                <li><code>$\lfloor x \rfloor$</code>, <code>$\lceil x \rceil$</code> → floor, ceil</li>
+                <li><code>$[x]$</code>, <code>$\lfloor x \rfloor$</code>, <code>$\lceil x \rceil$</code> → phần nguyên, floor, ceil</li>
             </ul>
         </details>
-
+        
         <details>
             <summary>🧠 III. Logic – Mệnh đề <small>(và, hoặc, suy ra, đúng/sai)</small></summary>
             <ul>
-                <li><code>$p \Rightarrow q$</code> → nếu p thì q</li>
-                <li><code>$p \Leftrightarrow q$</code> → p tương đương q</li>
+                <li><code>$p \Rightarrow q$</code>, <code>$p \rightarrow q$</code> → nếu p thì q</li>
+                <li><code>$p \Leftrightarrow q$</code>, <code>$p \leftrightarrow q$</code> → tương đương</li>
                 <li><code>$\neg p$</code> → phủ định p</li>
-                <li><code>$p \land q$</code> → p và q</li>
-                <li><code>$p \lor q$</code> → p hoặc q</li>
-                <li><code>$T$, $F$</code> → Đúng, Sai</li>
+                <li><code>$p \land q$</code>, <code>$p \wedge q$</code> → p và q</li>
+                <li><code>$p \lor q$</code>, <code>$p \vee q$</code> → p hoặc q</li>
+                <li><code>$T$</code>, <code>$F$</code> → Đúng, Sai</li>
                 <li><code>$\oplus$</code> → XOR (hoặc loại trừ)</li>
-                <li><code>$\therefore$</code> → do đó</li>
-                <li><code>$\because$</code> → bởi vì</li>
+                <li><code>$\therefore$</code>, <code>$\because$</code> → do đó, bởi vì</li>
             </ul>
         </details>
-
+        
         <details>
             <summary>🔗 IV. Tập hợp <small>(tập con, tập hợp, ∈, ∉, ∪, ∩)</small></summary>
             <ul>
-                <li><code>$x \in A$</code> → x thuộc tập A</li>
-                <li><code>$x \notin A$</code> → x không thuộc A</li>
-                <li><code>$A \subset B$</code> → A là tập con của B</li>
-                <li><code>$A \subseteq B$</code> → A là tập con hoặc bằng B</li>
+                <li><code>$x \in A$</code>, <code>$x \notin A$</code> → x thuộc/không thuộc A</li>
+                <li><code>$A \subset B$</code>, <code>$A \subseteq B$</code> → tập con</li>
+                <li><code>$A \cup B$</code>, <code>$A \cap B$</code>, <code>$A \setminus B$</code> → hợp, giao, hiệu</li>
                 <li><code>$A \times B$</code> → tích Descartes</li>
-                <li><code>$\forall x \in A$</code> → với mọi x thuộc A</li>
-                <li><code>$\exists x$</code> → tồn tại x</li>
+                <li><code>$\forall x \in A$</code>, <code>$\exists x$</code> → với mọi, tồn tại</li>
                 <li><code>$\emptyset$</code> → tập rỗng</li>
-                <li><code>$\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{R}, \mathbb{C}$</code> → tập số tự nhiên, nguyên,
-                    hữu tỉ, thực, phức</li>
+                <li><code>$\mathbb{N}$</code>, <code>$\mathbb{Z}$</code>, <code>$\mathbb{Q}$</code>, <code>$\mathbb{R}$</code>, <code>$\mathbb{C}$</code> → các tập số</li>
             </ul>
         </details>
-
+        
         <details>
             <summary>🧮 V. Hàm – Ánh xạ <small>(hàm ngược, hàm hợp, ánh xạ)</small></summary>
             <ul>
-                <li><code>$f: A \to B$</code> → ánh xạ từ A đến B</li>
-                <li><code>$f^{-1}(y)$</code> → giá trị ngược của y</li>
+                <li><code>$f: A \to B$</code> → ánh xạ</li>
+                <li><code>$f^{-1}$</code>, <code>$f^{-1}(y)$</code> → hàm ngược</li>
                 <li><code>$f \circ g$</code> → hàm hợp</li>
-                <li><code>$f^{-1}$</code> → ánh xạ ngược</li>
-                <li><code>$\text{dom }f$, $\text{ran }f$</code> → tập xác định, tập giá trị</li>
+                <li><code>$\text{dom }f$</code>, <code>$\text{ran }f$</code> → tập xác định, tập giá trị</li>
             </ul>
         </details>
-
+        
         <details>
             <summary>📊 VI. Đồ thị – Tin học <small>(đỉnh, cạnh, đồ thị, cây, chu trình)</small></summary>
             <ul>
-                <li><code>$G = (V, E)$</code> → đồ thị G</li>
-                <li><code>$deg(v)$</code> → bậc đỉnh v</li>
-                <li><code>$u \sim v$</code> → u và v kề nhau</li>
-                <li><code>$u \leftrightarrow v$</code> → có đường đi từ u tới v</li>
-                <li><code>$C_n$</code> → chu trình n đỉnh</li>
-                <li><code>$K_n$</code> → đồ thị đầy đủ</li>
+                <li><code>$G = (V, E)$</code> → đồ thị</li>
+                <li><code>$deg(v)$</code> → bậc đỉnh</li>
+                <li><code>$u \sim v$</code>, <code>$u \leftrightarrow v$</code> → kề nhau, có đường đi</li>
+                <li><code>$C_n$</code>, <code>$K_n$</code> → chu trình, đồ thị đầy đủ</li>
                 <li><code>$T$</code> → cây</li>
-                <li><code>$d(u,v)$</code> → độ dài đường đi ngắn nhất</li>
-                <li><code>$|V|$, $|E|$</code> → số đỉnh, số cạnh</li>
-                <li><code>$Adj(u)$</code> → tập đỉnh kề</li>
-                <li><code>$\delta(v)$</code> → bậc vào/ra (đồ thị có hướng)</li>
+                <li><code>$d(u,v)$</code> → khoảng cách</li>
+                <li><code>$|V|$</code>, <code>$|E|$</code> → số đỉnh, cạnh</li>
+                <li><code>$Adj(u)$</code>, <code>$\delta(v)$</code> → đỉnh kề, bậc vào/ra</li>
             </ul>
         </details>
-
+        
         <details>
             <summary>📐 VII. Hình học <small>(tam giác, góc, vuông góc, song song)</small></summary>
             <ul>
-                <li><code>$\triangle ABC$</code> → tam giác ABC</li>
-                <li><code>$\angle A$</code> → góc A</li>
-                <li><code>$AB \perp CD$</code> → vuông góc</li>
-                <li><code>$AB \parallel CD$</code> → song song</li>
-                <li><code>$S_{\triangle}$</code> → diện tích tam giác</li>
-                <li><code>$R$, $r$</code> → bán kính đường tròn ngoại tiếp/nội tiếp</li>
-                <li><code>$O$</code> → tâm đường tròn</li>
-                <li><code>$d$</code> → khoảng cách giữa hai điểm hoặc điểm và đường</li>
+                <li><code>$\triangle ABC$</code>, <code>$\angle A$</code> → tam giác, góc</li>
+                <li><code>$AB \perp CD$</code>, <code>$AB \parallel CD$</code> → vuông góc, song song</li>
+                <li><code>$S_{\triangle}$</code> → diện tích</li>
+                <li><code>$R$</code>, <code>$r$</code> → bán kính</li>
+                <li><code>$O$</code>, <code>$d$</code> → tâm, khoảng cách</li>
             </ul>
-
         </details>
+        
+        <details>
+            <summary>🧪 Dạng viết khác <small>(các ký hiệu tương đương/thay thế)</small></summary>
+            <ul>
+                <li><code>$p \rightarrow q$, $p \leftrightarrow q$</code> → tương đương dạng suy luận</li>
+                <li><code>$p \vee q$, $p \wedge q$</code> → dạng logic thay vì $\lor$, $\land$</li>
+                <li><code>$a \cdot b$, $x \cdot y$</code> → phép nhân</li>
+                <li><code>$x^{-1}$</code> → nghịch đảo</li>
+                <li><code>$x \cdot x$</code> → viết thay cho $x^2$</li>
+            </ul>
+        </details>        
+    </div>
 
-        <script>
-            function toggleHelp() {
-                const box = document.getElementById('helpBox');
-                const isShown = box.style.display === 'none';
-                box.style.display = isShown ? 'block' : 'none';
-
-                if (isShown && window.MathJax) {
-                    MathJax.typeset();
-                }
-            }
-
-            function toggleAllDetails(expand) {
-                const sections = document.querySelectorAll("#helpBox details");
-                sections.forEach(sec => sec.open = expand);
-            }
-
-            document.getElementById("helpSearch").addEventListener("input", function () {
-                const keyword = this.value.toLowerCase();
-                const helpBox = document.getElementById("helpBox");
-                const details = helpBox.querySelectorAll("details");
-
-                let found = false;
-                details.forEach(section => {
-                    const text = section.innerText.toLowerCase();
-                    if (text.includes(keyword)) {
-                        section.open = true;
-                        if (!found) {
-                            section.scrollIntoView({ behavior: "smooth", block: "start" });
-                            found = true;
-                        }
-                    } else {
-                        section.open = false;
-                    }
-                });
-
-                if (!found && keyword.length > 0) {
-                    alert("❗ Không tìm thấy từ khóa: " + keyword);
-                }
-            });
-
-            function toggleTheme() {
-                const isDark = document.body.classList.toggle("dark");
-                localStorage.setItem("theme", isDark ? "dark" : "light");
-            }
-
-            function clearNotes() {
-                localStorage.removeItem("mathNote");
-                document.getElementById("noteInput").value = "";
-                document.getElementById("output").innerHTML = "";
-            }
-
-            function convertToHTML(text) {
-                const lines = text.split("\n");
-                let html = "<ul>";
-
-                for (let i = 0; i < lines.length; ++i) {
-                    let trimmed = lines[i].trim();
-
-                    const mathExprMatch = trimmed.match(/\$(.+?)\$/);
-                    if (mathExprMatch) {
-                        try {
-                            let rawExpr = mathExprMatch[1]
-                                .replace(/\\sqrt{(.+?)}/g, 'sqrt($1)')
-                                .replace(/\\frac{(.+?)}{(.+?)}/g, '($1)/($2)')
-                                .replace(/\\log_{10}\((.+?)\)/g, 'log10($1)')
-                                .replace(/\\log\((.+?)\)/g, 'log($1)');
-
-                            const result = math.evaluate(rawExpr);
-                            if (!isNaN(result)) {
-                                trimmed += ` <span class="subnote">= ${result}</span>`;
-                            }
-                        } catch (e) {
-                            console.warn("Không thể tính toán:", e);
-                        }
-                    }
-
-                    if (/^[-*•]/.test(trimmed)) {
-                        html += `<li>${trimmed.slice(1).trim()}`;
-                        const nextLine = lines[i + 1]?.trim();
-                        if (nextLine && !/^[-*•]/.test(nextLine)) {
-                            html += `<div class="subnote">${nextLine}</div>`;
-                            ++i;
-                        }
-                        html += "</li>";
-                    } else if (trimmed) {
-                        html += `<li style="list-style-type:none">${trimmed}</li>`;
-                    }
-                }
-
-                html += "</ul>";
-                return html;
-            }
-
-            function updatePreview(text = null) {
-                const input = document.getElementById("noteInput");
-                const content = text ?? input.value;
-                const output = document.getElementById("output");
-
-                localStorage.setItem("mathNote", content);
-                output.innerHTML = convertToHTML(content);
-
-                if (window.MathJax && MathJax.typesetPromise) {
-                    MathJax.typesetPromise().then(() => {
-                        output.scrollTop = output.scrollHeight;
-                    });
-                }
-            }
-
-            function handleSave() {
-                updatePreview();
-                alert("📌 Đã lưu ghi chú!");
-            }
-
-            window.onload = function () {
-                const savedNote = localStorage.getItem("mathNote");
-                if (savedNote) {
-                    document.getElementById("noteInput").value = savedNote;
-                    updatePreview(savedNote);
-                }
-
-                const savedTheme = localStorage.getItem("theme");
-                if (savedTheme === "dark") {
-                    document.body.classList.add("dark");
-                }
-
-                document.getElementById("noteInput").addEventListener("input", () => updatePreview());
-            };
-        </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
