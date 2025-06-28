@@ -1,173 +1,25 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ghi chú Toán học</title>
-    <style>
-        body {
-            font-family: 'Cambria Math', sans-serif;
-            margin: 20px;
-            position: relative;
-            overflow-x: hidden;
-            background-color: #fefefe;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .background {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            background-image: url('math_bg_light.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            filter: blur(6px) brightness(1);
-            opacity: 0.35;
-            animation: drift 60s linear infinite;
-            transition: filter 0.5s, opacity 0.5s, background-image 0.5s;
-        }
-
-        @keyframes drift {
-            0% { transform: scale(1.05) translate(0, 0); }
-            50% { transform: scale(1.1) translate(-10px, -10px); }
-            100% { transform: scale(1.05) translate(0, 0); }
-        }
-
-        body.dark .background {
-            background-image: url('math_bg_dark.jpg');
-            filter: blur(10px) brightness(0.25);
-            opacity: 0.5;
-        }
-
-        textarea, #output {
-            width: 100%;
-            font-size: 16px;
-            padding: 8px;
-            border: 1px solid #aaa;
-            border-radius: 6px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        textarea {
-            height: 150px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 8px 16px;
-            font-size: 16px;
-            margin-right: 10px;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: rgba(255,255,255,0.8);
-            transition: background-color 0.3s;
-        }
-
-        #output {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            background-color: rgba(255,255,255,0.8);
-            backdrop-filter: blur(2px);
-            border-radius: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-
-        ul {
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-            color: #0066cc;
-        }
-
-        .subnote {
-            margin-top: 4px;
-            margin-left: 10px;
-            font-style: italic;
-            color: #555;
-        }
-
-        body.dark {
-            color: #e0e0e0;
-        }
-
-        body.dark textarea,
-        body.dark #output {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            border-color: #555;
-            backdrop-filter: blur(3px);
-        }
-
-        body.dark li {
-            color: #90caf9;
-        }
-
-        body.dark .subnote {
-            color: #aaa;
-        }
-
-        body.dark button {
-            background-color: rgba(50, 50, 50, 0.8);
-            color: #fff;
-            border: none;
-        }
-
-        body.dark h1 {
-            color: #bbdefb;
-        }
-
-        body.dark p, body.dark code {
-            color: #ccc;
-        }
-
-        #helpBox {
-            background-color: #f3f3f3;
-            color: #222;
-            border-radius: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            padding-right: 8px;
-        }
-
-        body.dark #helpBox {
-            background-color: #1e1e1e;
-            color: #ddd;
-            border-color: #555;
-        }
-
-        /* Thanh cuộn tùy chỉnh */
-        #helpBox::-webkit-scrollbar {
-            width: 8px;
-        }
-        #helpBox::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        #helpBox::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
 
     <!-- MathJax -->
     <script>
         window.MathJax = {
-        tex: { inlineMath: [['$', '$']] },
-        svg: { fontCache: 'global' }
+            tex: { inlineMath: [['$', '$']] },
+            svg: { fontCache: 'global' }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- math.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11/lib/browser/math.js"></script>
 </head>
+
 <body>
     <div class="background"></div>
 
@@ -175,16 +27,23 @@
     <button onclick="toggleTheme()">🌗 Đổi nền Sáng/Tối</button>
     <button onclick="handleSave()">💾 Lưu và xem</button>
     <button onclick="clearNotes()">🗑️ Xóa ghi chú</button>
-    <p><strong>Mẹo:</strong> Gạch đầu dòng bằng <code>-</code>, <code>*</code> hoặc <code>•</code>. Ghi chú phụ nằm ngay dưới công thức.</p>
+    <p><strong>Mẹo:</strong> Gạch đầu dòng bằng <code>-</code>, <code>*</code> hoặc <code>•</code>. Ghi chú phụ nằm ngay
+        dưới công thức.</p>
 
     <textarea id="noteInput" placeholder="Ví dụ:
     - Định lý Pythagore: $a^2 + b^2 = c^2$
     Áp dụng khi tam giác vuông, cạnh c là cạnh huyền.
 
-    - Diện tích tam giác: $S = \frac{1}{2}ab\sin C$"></textarea>
-    <br />
+    - Diện tích: $S = \frac{1}{2}ab\sin(C)$
+    - Tính toán: $2^4 + \sqrt{16} + \log_{10}(100)$"></textarea>
 
     <div id="output"></div>
+
+    <div id="helpControls" style="margin-top: 10px;">
+        🔍 <input type="text" id="helpSearch" placeholder="Tìm từ khóa..." style="padding: 4px; width: 200px;" />
+        <button onclick="toggleAllDetails(true)">Mở tất cả</button>
+        <button onclick="toggleAllDetails(false)">Thu gọn tất cả</button>
+    </div>
 
     <button onclick="toggleHelp()">📘 Gợi ý ký hiệu</button>
     <div id="helpBox" style="
@@ -197,9 +56,8 @@
         background-color: #f3f3f3;
         border-radius: 6px;
     ">
-        <strong>Ký hiệu thường dùng:</strong>
         <details open>
-            <summary>📐 I. Đại số – Giải tích</summary>
+            <summary>📐 I. Đại số – Giải tích <small>(bình phương, căn, đạo hàm, tích phân...)</small></summary>
             <ul>
                 <li><code>$a^2$</code> → a bình phương</li>
                 <li><code>$\sqrt{x}$</code> → căn bậc hai của x</li>
@@ -212,11 +70,16 @@
                 <li><code>$\frac{dy}{dx}$</code> → đạo hàm vi phân</li>
                 <li><code>$x \in \mathbb{R}$</code> → x thuộc tập số thực</li>
                 <li><code>$x \notin A$</code> → x không thuộc tập A</li>
+                <li><code>$\log x$</code> → logarit cơ số 10 của x</li>
+                <li><code>$\ln x$</code> → logarit tự nhiên</li>
+                <li><code>$e^x$</code> → hàm mũ</li>
+                <li><code>$\sin x$, $\cos x$, $\tan x$</code> → các hàm lượng giác</li>
+                <li><code>$|x|$</code> → giá trị tuyệt đối</li>
             </ul>
         </details>
 
         <details>
-            <summary>🔢 II. Tổ hợp – Rời rạc</summary>
+            <summary>🔢 II. Tổ hợp – Rời rạc <small>(giai thừa, tổ hợp, tổng, giao – hợp)</small></summary>
             <ul>
                 <li><code>$\binom{n}{k}$</code> → tổ hợp C(n, k)</li>
                 <li><code>$n!$</code> → giai thừa</li>
@@ -227,11 +90,14 @@
                 <li><code>$A \cup B$</code> → hợp của A và B</li>
                 <li><code>$A \cap B$</code> → giao của A và B</li>
                 <li><code>$A \setminus B$</code> → A trừ B</li>
+                <li><code>$n^k$</code> → số chỉnh hợp lặp</li>
+                <li><code>$[x]$</code> → phần nguyên của x</li>
+                <li><code>$\lfloor x \rfloor$</code>, <code>$\lceil x \rceil$</code> → floor, ceil</li>
             </ul>
         </details>
-        
+
         <details>
-            <summary>🧠 III. Logic – Mệnh đề</summary>
+            <summary>🧠 III. Logic – Mệnh đề <small>(và, hoặc, suy ra, đúng/sai)</small></summary>
             <ul>
                 <li><code>$p \Rightarrow q$</code> → nếu p thì q</li>
                 <li><code>$p \Leftrightarrow q$</code> → p tương đương q</li>
@@ -239,11 +105,14 @@
                 <li><code>$p \land q$</code> → p và q</li>
                 <li><code>$p \lor q$</code> → p hoặc q</li>
                 <li><code>$T$, $F$</code> → Đúng, Sai</li>
+                <li><code>$\oplus$</code> → XOR (hoặc loại trừ)</li>
+                <li><code>$\therefore$</code> → do đó</li>
+                <li><code>$\because$</code> → bởi vì</li>
             </ul>
         </details>
-            
+
         <details>
-            <summary>🔗 IV. Tập hợp</summary>
+            <summary>🔗 IV. Tập hợp <small>(tập con, tập hợp, ∈, ∉, ∪, ∩)</small></summary>
             <ul>
                 <li><code>$x \in A$</code> → x thuộc tập A</li>
                 <li><code>$x \notin A$</code> → x không thuộc A</li>
@@ -252,20 +121,25 @@
                 <li><code>$A \times B$</code> → tích Descartes</li>
                 <li><code>$\forall x \in A$</code> → với mọi x thuộc A</li>
                 <li><code>$\exists x$</code> → tồn tại x</li>
+                <li><code>$\emptyset$</code> → tập rỗng</li>
+                <li><code>$\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{R}, \mathbb{C}$</code> → tập số tự nhiên, nguyên,
+                    hữu tỉ, thực, phức</li>
             </ul>
         </details>
-            
+
         <details>
-            <summary>🧮 V. Hàm – Ánh xạ</summary>
+            <summary>🧮 V. Hàm – Ánh xạ <small>(hàm ngược, hàm hợp, ánh xạ)</small></summary>
             <ul>
                 <li><code>$f: A \to B$</code> → ánh xạ từ A đến B</li>
                 <li><code>$f^{-1}(y)$</code> → giá trị ngược của y</li>
                 <li><code>$f \circ g$</code> → hàm hợp</li>
+                <li><code>$f^{-1}$</code> → ánh xạ ngược</li>
+                <li><code>$\text{dom }f$, $\text{ran }f$</code> → tập xác định, tập giá trị</li>
             </ul>
         </details>
-            
+
         <details>
-            <summary>📊 VI. Đồ thị – Tin học</summary>
+            <summary>📊 VI. Đồ thị – Tin học <small>(đỉnh, cạnh, đồ thị, cây, chu trình)</small></summary>
             <ul>
                 <li><code>$G = (V, E)$</code> → đồ thị G</li>
                 <li><code>$deg(v)$</code> → bậc đỉnh v</li>
@@ -274,100 +148,156 @@
                 <li><code>$C_n$</code> → chu trình n đỉnh</li>
                 <li><code>$K_n$</code> → đồ thị đầy đủ</li>
                 <li><code>$T$</code> → cây</li>
+                <li><code>$d(u,v)$</code> → độ dài đường đi ngắn nhất</li>
+                <li><code>$|V|$, $|E|$</code> → số đỉnh, số cạnh</li>
+                <li><code>$Adj(u)$</code> → tập đỉnh kề</li>
+                <li><code>$\delta(v)$</code> → bậc vào/ra (đồ thị có hướng)</li>
             </ul>
         </details>
-            
+
         <details>
-            <summary>📐 VII. Hình học</summary>
+            <summary>📐 VII. Hình học <small>(tam giác, góc, vuông góc, song song)</small></summary>
             <ul>
                 <li><code>$\triangle ABC$</code> → tam giác ABC</li>
                 <li><code>$\angle A$</code> → góc A</li>
                 <li><code>$AB \perp CD$</code> → vuông góc</li>
                 <li><code>$AB \parallel CD$</code> → song song</li>
+                <li><code>$S_{\triangle}$</code> → diện tích tam giác</li>
+                <li><code>$R$, $r$</code> → bán kính đường tròn ngoại tiếp/nội tiếp</li>
+                <li><code>$O$</code> → tâm đường tròn</li>
+                <li><code>$d$</code> → khoảng cách giữa hai điểm hoặc điểm và đường</li>
             </ul>
+
         </details>
-    </div>
 
-    <script>
-        function toggleHelp() {
-            const box = document.getElementById('helpBox');
-            const isShown = box.style.display === 'none';
-            box.style.display = isShown ? 'block' : 'none';
+        <script>
+            function toggleHelp() {
+                const box = document.getElementById('helpBox');
+                const isShown = box.style.display === 'none';
+                box.style.display = isShown ? 'block' : 'none';
 
-            if (isShown && window.MathJax) {
-                MathJax.typeset();
+                if (isShown && window.MathJax) {
+                    MathJax.typeset();
+                }
             }
-        }
 
-        function toggleTheme() {
-            const isDark = document.body.classList.toggle("dark");
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-        }
+            function toggleAllDetails(expand) {
+                const sections = document.querySelectorAll("#helpBox details");
+                sections.forEach(sec => sec.open = expand);
+            }
 
-        function handleSave() {
-            const text = document.getElementById("noteInput").value;
-            localStorage.setItem("mathNote", text);
-            const output = document.getElementById("output");
-            output.innerHTML = convertToHTML(text);
+            document.getElementById("helpSearch").addEventListener("input", function () {
+                const keyword = this.value.toLowerCase();
+                const helpBox = document.getElementById("helpBox");
+                const details = helpBox.querySelectorAll("details");
 
-            if (window.MathJax && MathJax.typesetPromise) {
-                MathJax.typesetPromise().then(() => {
-                output.scrollTop = output.scrollHeight;
+                let found = false;
+                details.forEach(section => {
+                    const text = section.innerText.toLowerCase();
+                    if (text.includes(keyword)) {
+                        section.open = true;
+                        if (!found) {
+                            section.scrollIntoView({ behavior: "smooth", block: "start" });
+                            found = true;
+                        }
+                    } else {
+                        section.open = false;
+                    }
                 });
-            } else {
-                output.scrollTop = output.scrollHeight;
-            }
 
-            alert("📌 Đã lưu ghi chú!");
-        }
-
-        function clearNotes() {
-            localStorage.removeItem("mathNote");
-            document.getElementById("noteInput").value = "";
-            document.getElementById("output").innerHTML = "";
-        }
-
-        function convertToHTML(text) {
-            const lines = text.split("\n");
-            let html = "<ul>";
-            for (let i = 0; i < lines.length; ++i) {
-                const trimmed = lines[i].trim();
-                if (/^[-*•]/.test(trimmed)) {
-                html += `<li>${trimmed.slice(1).trim()}`;
-                const nextLine = lines[i + 1]?.trim();
-                if (nextLine && !/^[-*•]/.test(nextLine)) {
-                    html += `<div class="subnote">${nextLine}</div>`;
-                    ++i;
+                if (!found && keyword.length > 0) {
+                    alert("❗ Không tìm thấy từ khóa: " + keyword);
                 }
-                html += "</li>";
-                } else if (trimmed) {
-                html += `<li style="list-style-type:none">${trimmed}</li>`;
-                }
-            }
-            html += "</ul>";
-            return html;
-        }
-
-        window.onload = function () {
-            const saved = localStorage.getItem("mathNote");
-            if (saved) {
-                document.getElementById("noteInput").value = saved;
-                document.getElementById("output").innerHTML = convertToHTML(saved);
-                if (window.MathJax) MathJax.typeset();
-            }
-
-            const savedTheme = localStorage.getItem("theme");
-            if (savedTheme === "dark") {
-                document.body.classList.add("dark");
-            }
-
-            // Tự động lưu khi gõ
-            document.getElementById("noteInput").addEventListener("input", () => {
-                localStorage.setItem("mathNote", document.getElementById("noteInput").value);
-                document.getElementById("output").innerHTML = convertToHTML(document.getElementById("noteInput").value);
-                if (window.MathJax) MathJax.typeset();
             });
-        };
-    </script>
+
+            function toggleTheme() {
+                const isDark = document.body.classList.toggle("dark");
+                localStorage.setItem("theme", isDark ? "dark" : "light");
+            }
+
+            function clearNotes() {
+                localStorage.removeItem("mathNote");
+                document.getElementById("noteInput").value = "";
+                document.getElementById("output").innerHTML = "";
+            }
+
+            function convertToHTML(text) {
+                const lines = text.split("\n");
+                let html = "<ul>";
+
+                for (let i = 0; i < lines.length; ++i) {
+                    let trimmed = lines[i].trim();
+
+                    const mathExprMatch = trimmed.match(/\$(.+?)\$/);
+                    if (mathExprMatch) {
+                        try {
+                            let rawExpr = mathExprMatch[1]
+                                .replace(/\\sqrt{(.+?)}/g, 'sqrt($1)')
+                                .replace(/\\frac{(.+?)}{(.+?)}/g, '($1)/($2)')
+                                .replace(/\\log_{10}\((.+?)\)/g, 'log10($1)')
+                                .replace(/\\log\((.+?)\)/g, 'log($1)');
+
+                            const result = math.evaluate(rawExpr);
+                            if (!isNaN(result)) {
+                                trimmed += ` <span class="subnote">= ${result}</span>`;
+                            }
+                        } catch (e) {
+                            console.warn("Không thể tính toán:", e);
+                        }
+                    }
+
+                    if (/^[-*•]/.test(trimmed)) {
+                        html += `<li>${trimmed.slice(1).trim()}`;
+                        const nextLine = lines[i + 1]?.trim();
+                        if (nextLine && !/^[-*•]/.test(nextLine)) {
+                            html += `<div class="subnote">${nextLine}</div>`;
+                            ++i;
+                        }
+                        html += "</li>";
+                    } else if (trimmed) {
+                        html += `<li style="list-style-type:none">${trimmed}</li>`;
+                    }
+                }
+
+                html += "</ul>";
+                return html;
+            }
+
+            function updatePreview(text = null) {
+                const input = document.getElementById("noteInput");
+                const content = text ?? input.value;
+                const output = document.getElementById("output");
+
+                localStorage.setItem("mathNote", content);
+                output.innerHTML = convertToHTML(content);
+
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise().then(() => {
+                        output.scrollTop = output.scrollHeight;
+                    });
+                }
+            }
+
+            function handleSave() {
+                updatePreview();
+                alert("📌 Đã lưu ghi chú!");
+            }
+
+            window.onload = function () {
+                const savedNote = localStorage.getItem("mathNote");
+                if (savedNote) {
+                    document.getElementById("noteInput").value = savedNote;
+                    updatePreview(savedNote);
+                }
+
+                const savedTheme = localStorage.getItem("theme");
+                if (savedTheme === "dark") {
+                    document.body.classList.add("dark");
+                }
+
+                document.getElementById("noteInput").addEventListener("input", () => updatePreview());
+            };
+        </script>
 </body>
+
 </html>
