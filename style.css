@@ -224,18 +224,6 @@ body.dark .subnote {
 }
 
 /* ========================
-    PHÂN CHIA THEO CHỦ ĐỀ
-======================== */
-h3 {
-    margin-top: 30px;
-    color: #01579b;
-}
-
-body.dark h3 {
-    color: #81d4fa;
-}
-
-/* ========================
     PHIÊN BẢN DI ĐỘNG
 ======================== */
 @media screen and (max-width: 600px) {
