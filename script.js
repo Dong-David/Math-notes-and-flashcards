@@ -1,3 +1,4 @@
+/* global math */
 function toggleHelp() {
     const box = document.getElementById('helpBox');
     const isShown = box.style.display === 'none';
@@ -48,51 +49,16 @@ function clearNotes() {
     }
 }
 
-function buildTopicRegexMapFromHelpBox() {
-    const topicMap = {};
-    const details = document.querySelectorAll("#helpBox details");
-
-    details.forEach(section => {
-        const summaryEl = section.querySelector("summary");
-        if (!summaryEl) return;
-
-        const topic = summaryEl.textContent.trim().replace(/\s*\(.*?\)/, "");
-        const codes = section.querySelectorAll("code");
-        const patterns = [];
-
-        codes.forEach(code => {
-            const content = code.textContent;
-            const exprs = content.split(",").map(e => e.trim());
-
-            exprs.forEach(expr => {
-                const cleanExpr = expr
-                    .replace(/^\$/, "")
-                    .replace(/\$$/, "")
-                    .replace(/\s+/g, "")
-                    .trim();
-
-                if (cleanExpr.length < 1) return;
-
-                const escaped = cleanExpr.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-                const regex = new RegExp(escaped);
-                patterns.push(regex);
-            });
-        });
-
-        if (topic && patterns.length > 0) {
-            topicMap[topic] = patterns;
-        }
-    });
-
-    return topicMap;
-}
-
 function convertToHTML(text) {
-    const topicRegexMap = buildTopicRegexMapFromHelpBox();
-    const lines = text.split("\n");
+    console.log("▶️ Đang xử lý HTML từ ghi chú...");
 
-    const grouped = {};
-    let other = [];
+    if (typeof math === "undefined") {
+        console.error("❌ math.js chưa sẵn sàng!");
+        return "<p style='color:red'>Không thể tính toán: math.js chưa được tải</p>";
+    }
+
+    const lines = text.split("\n");
+    let html = "<ul>";
 
     for (let i = 0; i < lines.length; ++i) {
         let trimmed = lines[i].trim();
@@ -100,23 +66,39 @@ function convertToHTML(text) {
 
         const mathExprMatches = [...trimmed.matchAll(/\$(.+?)\$/g)];
         for (const match of mathExprMatches) {
+            const latexExpr = match[1];
+
             try {
-                let rawExpr = match[1]
+                // Bỏ qua nếu chứa chữ cái hoặc dấu ngoặc nhọn {}
+                if (/[a-zA-Z{}]/.test(latexExpr)) continue;
+
+                // Thay thế LaTeX bằng biểu thức có thể hiểu bởi math.js
+                let rawExpr = latexExpr
                     .replace(/\\sqrt{(.+?)}/g, 'sqrt($1)')
+                    .replace(/\\sqrt\((.+?)\)/g, 'sqrt($1)')
                     .replace(/\\frac{(.+?)}{(.+?)}/g, '($1)/($2)')
-                    .replace(/\\log_{10}\((.+?)\)/g, 'log10($1)')
-                    .replace(/\\log\((.+?)\)/g, 'log($1)');
-                const result = math.evaluate(rawExpr);
-                if (!isNaN(result)) {
+                    .replace(/\\cdot/g, '*')
+                    .replace(/\^/g, '**'); // chuyển ^ thành ** cho math.js
+
+                // Loại bỏ dấu cách thừa (nếu có)
+                rawExpr = rawExpr.trim();
+
+                // Chỉ tính nếu không có biến
+                if (!/[a-zA-Z{}]/.test(rawExpr)) {
+                    const result = math.evaluate(rawExpr);
+                    console.log("✅ Đã tính:", rawExpr, "→", result);
+                
+                    // Gắn kết quả vào HTML
                     trimmed = trimmed.replace(
-                        `$${match[1]}$`,
-                        `$${match[1]}$ <span class="subnote">= ${result}</span>`
+                        `$${latexExpr}$`,
+                        `$${latexExpr}$ <span class="subnote">= ${result}</span>`
                     );
                 }
-            } catch {}
+            } catch (e) {
+                console.warn("⚠️ Không thể tính biểu thức:", latexExpr, e);
+            }
         }
 
-        let html = "";
         if (/^[-*•]/.test(trimmed)) {
             html += `<li>${trimmed.slice(1).trim()}`;
             const next = lines[i + 1]?.trim();
@@ -128,40 +110,10 @@ function convertToHTML(text) {
         } else {
             html += `<li style="list-style-type:none">${trimmed}</li>`;
         }
-
-        let matchedTopics = new Set();
-        const exprMatches = [...trimmed.matchAll(/\$(.+?)\$/g)];
-        for (const match of exprMatches) {
-            for (const [topic, regexList] of Object.entries(topicRegexMap)) {
-                if (regexList.some(r => r.test(match[1].replace(/\s+/g, "")))) {
-                    matchedTopics.add(topic);
-                }
-            }
-        }
-
-        if (matchedTopics.size > 0) {
-            for (const topic of matchedTopics) {
-                if (!grouped[topic]) grouped[topic] = [];
-                grouped[topic].push(html);
-            }
-        } else {
-            other.push(html);
-        }
     }
 
-    let resultHTML = "";
-    const topicOrder = Object.keys(topicRegexMap);
-    for (const topic of topicOrder) {
-        if (!grouped[topic]) continue;
-        const items = grouped[topic];
-        resultHTML += `<h3>${topic}</h3><ul>${items.join("")}</ul>`;
-    }
-
-    if (other.length) {
-        resultHTML += `<h3>📄 Khác</h3><ul>${other.join("")}</ul>`;
-    }
-
-    return resultHTML;
+    html += "</ul>";
+    return html;
 }
 
 function updatePreview(text = null) {
@@ -176,8 +128,8 @@ function updatePreview(text = null) {
     if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise().then(() => {
             output.scrollTop = output.scrollHeight;
-        }).catch(() => {
-            console.error("MathJax rendering failed.");
+        }).catch((err) => {
+            console.error("❗ MathJax rendering failed:", err);
         });
     }
 }
@@ -193,6 +145,13 @@ function handleSave() {
 }
 
 window.onload = function () {
+    console.log("⚙️ math loại:", typeof math);  // 👉 phải là 'object'
+
+    if (typeof math === 'undefined') {
+        console.error("❗ math.js chưa được tải!");
+        return;
+    }
+
     const savedNote = localStorage.getItem("mathNote");
     if (savedNote) {
         document.getElementById("noteInput").value = savedNote;
