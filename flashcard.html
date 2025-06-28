@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcard Tiếng Anh của bé Đan</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom right, #e1f5fe, #f1f8e9);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 { color: #01579b; margin-bottom: 10px; text-align: center; }
+    .filters, .form, .controls, .move-form {
+      margin: 15px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    select, input, textarea, button {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    button {
+      background: #0288d1;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #0277bd; }
+    .flashcard-container {
+      width: 420px;
+      height: 260px;
+      perspective: 1000px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .flashcard {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+    .flashcard-inner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      padding: 20px;
+      text-align: center;
+    }
+    .front, .back { backface-visibility: hidden; background: #fff; }
+    .back { background: #e3f2fd; transform: rotateY(180deg); }
+    .flipped { transform: rotateY(180deg); }
+    .delete-btn { background: #ef5350; }
+    .delete-btn:hover { background: #e53935; }
+    .counter { font-size: 16px; color: #555; margin-bottom: 10px; }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      width: 100%;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📘 Flashcard Tiếng Anh của bé Đan</h1>
+  <div class="filters">
+    <select id="level-filter" onchange="updateTopicFilter()">
+      <option value="">Trình độ (Tất cả)</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+    <select id="topic-filter">
+      <option value="">Chủ đề (Tất cả)</option>
+    </select>
+  </div>
+  <div class="form">
+    <input id="front-input" placeholder="Từ...">
+    <input id="back-input" placeholder="Nghĩa...">
+    <select id="level-input" onchange="updateTopicOptions()">
+      <option value="">Chọn trình độ</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+    <select id="topic-input">
+      <option value="">Chọn chủ đề</option>
+    </select>
+    <input id="new-topic" placeholder="(Hoặc thêm chủ đề mới)">
+    <button onclick="addCard()">➕ Thêm thẻ</button>
+  </div>
+  <div class="form" style="flex-direction: column; align-items: center;">
+    <textarea id="bulk-input" placeholder="apple (n) : quả táo&#10;computer : máy tính&#10;..."></textarea>
+    <button onclick="addBulkCards()">➕ Thêm danh sách</button>
+  </div>
+  <div class="counter" id="counter"></div>
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-inner front" id="card-front">Từ: Hello</div>
+      <div class="flashcard-inner back" id="card-back">Nghĩa: Xin chào</div>
+    </div>
+  </div>
+  <div class="controls">
+    <button onclick="prevCard()">◀ Trước</button>
+    <button onclick="nextCard()">Sau ▶</button>
+    <button class="delete-btn" onclick="deleteCard()">🗑 Xoá</button>
+  </div>
+  <div class="move-form">
+    <select id="move-level" onchange="updateMoveTopics()">
+      <option value="">Chuyển sang trình độ...</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+    <select id="move-topic">
+      <option value="">Chọn chủ đề...</option>
+    </select>
+    <button onclick="moveCard()">🔁 Di chuyển</button>
+  </div>
+  <script>
+    let allCards = [];
+    let topicsByLevel = { B2: [], C1: [], C2: [] };
+    let filteredCards = [];
+    let current = 0;
+    const flashcard = document.getElementById("flashcard");
+    const front = document.getElementById("card-front");
+    const back = document.getElementById("card-back");
+    const counter = document.getElementById("counter");
+    const levelInput = document.getElementById("level-input");
+    const topicInput = document.getElementById("topic-input");
+    const newTopicInput = document.getElementById("new-topic");
+    const levelFilter = document.getElementById("level-filter");
+    const topicFilter = document.getElementById("topic-filter");
+
+    function saveToStorage() {
+      localStorage.setItem("flashcards", JSON.stringify(allCards));
+      localStorage.setItem("topicsByLevel", JSON.stringify(topicsByLevel));
+    }
+
+    function loadFromStorage() {
+      const cards = localStorage.getItem("flashcards");
+      const topics = localStorage.getItem("topicsByLevel");
+      if (cards) allCards = JSON.parse(cards);
+      if (topics) topicsByLevel = JSON.parse(topics);
+      updateTopicOptions();
+      updateTopicFilter();
+      applyFilters();
+      updateCard();
+    }
+
+    function updateCard() {
+      if (filteredCards.length === 0) {
+        front.textContent = "Không có thẻ nào.";
+        back.textContent = "Hãy thêm flashcard!";
+        counter.textContent = "";
+        return;
+      }
+      flashcard.classList.remove("flipped");
+      front.textContent = filteredCards[current].front;
+      back.textContent = filteredCards[current].back;
+      counter.textContent = `Thẻ ${current + 1} / ${filteredCards.length}`;
+    }
+
+    function flipCard() {
+      flashcard.classList.toggle("flipped");
+    }
+    function nextCard() {
+      if (filteredCards.length) {
+        current = (current + 1) % filteredCards.length;
+        updateCard();
+      }
+    }
+    function prevCard() {
+      if (filteredCards.length) {
+        current = (current - 1 + filteredCards.length) % filteredCards.length;
+        updateCard();
+      }
+    }
+
+    function addCard() {
+      const frontVal = document.getElementById("front-input").value.trim();
+      const backVal = document.getElementById("back-input").value.trim();
+      const level = levelInput.value;
+      let topic = topicInput.value;
+      const newTopic = newTopicInput.value.trim();
+      if (!frontVal || !backVal || !level) return alert("Nhập đủ từ, nghĩa, trình độ!");
+      if (newTopic) {
+        topic = newTopic;
+        if (!topicsByLevel[level].includes(topic)) topicsByLevel[level].push(topic);
+      }
+      if (!topic) return alert("Chọn hoặc nhập chủ đề!");
+      allCards.push({ front: "Từ: " + frontVal, back: "Nghĩa: " + backVal, level, topic });
+      saveToStorage();
+      updateTopicOptions();
+      applyFilters();
+      current = filteredCards.length - 1;
+      updateCard();
+    }
+
+    function deleteCard() {
+      if (filteredCards.length === 0) return;
+      const cardToDelete = filteredCards[current];
+      allCards = allCards.filter(c => !(c.front === cardToDelete.front && c.back === cardToDelete.back && c.level === cardToDelete.level && c.topic === cardToDelete.topic));
+      saveToStorage();
+      applyFilters();
+      current = Math.max(0, current - 1);
+      updateCard();
+    }
+
+    function applyFilters() {
+      const level = levelFilter.value;
+      const topic = topicFilter.value;
+      filteredCards = allCards.filter(card => (!level || card.level === level) && (!topic || card.topic === topic));
+      current = 0;
+      updateCard();
+    }
+
+    function updateTopicOptions() {
+      const level = levelInput.value;
+      topicInput.innerHTML = '<option value="">Chọn chủ đề</option>';
+      if (topicsByLevel[level]) {
+        topicsByLevel[level].forEach(t => {
+          topicInput.innerHTML += `<option value="${t}">${t}</option>`;
+        });
+      }
+    }
+
+    function updateTopicFilter() {
+      const level = levelFilter.value;
+      topicFilter.innerHTML = '<option value="">Chủ đề (Tất cả)</option>';
+      if (topicsByLevel[level]) {
+        topicsByLevel[level].forEach(t => {
+          topicFilter.innerHTML += `<option value="${t}">${t}</option>`;
+        });
+      }
+      applyFilters();
+    }
+
+    function addBulkCards() {
+      const text = document.getElementById("bulk-input").value.trim();
+      const level = levelInput.value;
+      let topic = topicInput.value;
+      const newTopic = newTopicInput.value.trim();
+      if (!level) return alert("Hãy chọn trình độ!");
+      if (newTopic) {
+        topic = newTopic;
+        if (!topicsByLevel[level].includes(topic)) topicsByLevel[level].push(topic);
+      }
+      if (!topic) return alert("Chọn hoặc nhập chủ đề!");
+      const lines = text.split('\n');
+      let added = 0;
+      for (let line of lines) {
+        if (!line.includes(':')) continue;
+        const [frontRaw, backRaw] = line.split(':');
+        const front = frontRaw.trim();
+        const back = backRaw.trim();
+        if (front && back) {
+          allCards.push({ front: "Từ: " + front, back: "Nghĩa: " + back, level, topic });
+          added++;
+        }
+      }
+      if (added > 0) {
+        saveToStorage();
+        updateTopicOptions();
+        applyFilters();
+        current = filteredCards.length - 1;
+        updateCard();
+        document.getElementById("bulk-input").value = "";
+      } else {
+        alert("Không thêm được thẻ nào. Hãy kiểm tra định dạng!");
+      }
+    }
+
+    function updateMoveTopics() {
+      const level = document.getElementById("move-level").value;
+      const topicSelect = document.getElementById("move-topic");
+      topicSelect.innerHTML = '<option value="">Chọn chủ đề...</option>';
+      if (topicsByLevel[level]) {
+        topicsByLevel[level].forEach(t => {
+          topicSelect.innerHTML += `<option value="${t}">${t}</option>`;
+        });
+      }
+    }
+
+    function moveCard() {
+      const newLevel = document.getElementById("move-level").value;
+      const newTopic = document.getElementById("move-topic").value;
+      if (!filteredCards.length) return;
+      if (!newLevel || !newTopic) return alert("Chọn cả trình độ và chủ đề mới!");
+      const card = filteredCards[current];
+      const i = allCards.findIndex(c => c.front === card.front && c.back === card.back && c.level === card.level && c.topic === card.topic);
+      if (i !== -1) {
+        allCards[i].level = newLevel;
+        allCards[i].topic = newTopic;
+        if (!topicsByLevel[newLevel].includes(newTopic)) topicsByLevel[newLevel].push(newTopic);
+        saveToStorage();
+        applyFilters();
+        updateCard();
+      }
+    }
+
+    levelFilter.addEventListener("change", updateTopicFilter);
+    topicFilter.addEventListener("change", applyFilters);
+    loadFromStorage();
+  </script>
+</body>
+</html>
