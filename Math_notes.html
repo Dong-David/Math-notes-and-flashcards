@@ -11,13 +11,14 @@
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$', '$']] },
-            svg: { fontCache: 'global' }
+            svg: { fontCache: 'global' },
+            abs: ["\\left|#1\\right|", 1]
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
     <!-- math.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.1/math.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
