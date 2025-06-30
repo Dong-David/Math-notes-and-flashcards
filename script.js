@@ -67,36 +67,65 @@ function convertToHTML(text) {
         const mathExprMatches = [...trimmed.matchAll(/\$(.+?)\$/g)];
         for (const match of mathExprMatches) {
             const latexExpr = match[1];
-
+            console.log("📥 latexExpr raw:", JSON.stringify(latexExpr));
             try {
-                // Bỏ qua nếu chứa chữ cái hoặc dấu ngoặc nhọn {}
-                if (/[a-zA-Z{}]/.test(latexExpr)) continue;
-
-                // Thay thế LaTeX bằng biểu thức có thể hiểu bởi math.js
                 let rawExpr = latexExpr
-                    .replace(/\\sqrt{(.+?)}/g, 'sqrt($1)')
-                    .replace(/\\sqrt\((.+?)\)/g, 'sqrt($1)')
-                    .replace(/\\frac{(.+?)}{(.+?)}/g, '($1)/($2)')
-                    .replace(/\\cdot/g, '*')
-                    .replace(/\^/g, '**'); // chuyển ^ thành ** cho math.js
+                // Mũ
+                .replace(/\^\{(.+?)\}/g, '**($1)')
+                .replace(/\^([a-zA-Z0-9]+)/g, '**$1')
 
-                // Loại bỏ dấu cách thừa (nếu có)
-                rawExpr = rawExpr.trim();
+                // Phân số, căn, nhân
+                .replace(/\\frac{(.+?)}{(.+?)}/g, '($1)/($2)')
+                .replace(/\\sqrt{(.+?)}/g, 'sqrt($1)')
+                .replace(/\\cdot/g, '*')
 
-                // Chỉ tính nếu không có biến
-                if (!/[a-zA-Z{}]/.test(rawExpr)) {
-                    const result = math.evaluate(rawExpr);
-                    console.log("✅ Đã tính:", rawExpr, "→", result);
-                
-                    // Gắn kết quả vào HTML
-                    trimmed = trimmed.replace(
-                        `$${latexExpr}$`,
-                        `$${latexExpr}$ <span class="subnote">= ${result}</span>`
-                    );
-                }
+                // Lượng giác
+                .replace(/\\sin\{(.+?)\}/g, 'sin($1)')
+                .replace(/\\cos\{(.+?)\}/g, 'cos($1)')
+                .replace(/\\tan\{(.+?)\}/g, 'tan($1)')
+                .replace(/\\cot\{(.+?)\}/g, 'cot($1)')
+                .replace(/\\sec\{(.+?)\}/g, 'sec($1)')
+                .replace(/\\csc\{(.+?)\}/g, 'csc($1)')
+
+                // Hàm ngược
+                .replace(/\\arcsin\{(.+?)\}/g, 'asin($1)')
+                .replace(/\\arccos\{(.+?)\}/g, 'acos($1)')
+                .replace(/\\arctan\{(.+?)\}/g, 'atan($1)')
+
+                // Logarit
+                .replace(/\\log\{(.+?)\}/g, 'log10($1)')
+                .replace(/\\ln\{(.+?)\}/g, 'log($1)')
+
+                // Làm tròn
+                .replace(/\\floor\{(.+?)\}/g, 'floor($1)')
+                .replace(/\\ceil\{(.+?)\}/g, 'ceil($1)')
+                .replace(/\\round\{(.+?)\}/g, 'round($1)')
+
+                // max, min
+                .replace(/\\max\{(.+?)\}/g, 'max($1)')
+                .replace(/\\min\{(.+?)\}/g, 'min($1)')
+
+                // Hàm mũ, trị tuyệt đối
+                .replace(/\\exp\{(.+?)\}/g, 'exp($1)')
+                .replace(/\\abs\{(.+?)\}/g, 'abs($1)')
+
+                // hằng số
+                .replace(/\\pi/g, 'pi')
+                .replace(/\be\b/g, 'e') // giữ chữ e thường nếu không ở trong tên biến
+
+                .trim();
+            
+                const result = math.evaluate(rawExpr);
+                console.log("✅ Đã tính:", rawExpr, "→", result);
+                console.log("📦 latexExpr =", latexExpr);
+            
+                trimmed = trimmed.replace(
+                    `$${latexExpr}$`,
+                    `$${latexExpr}$ <span class="subnote">= ${result}</span>`
+                );
             } catch (e) {
                 console.warn("⚠️ Không thể tính biểu thức:", latexExpr, e);
-            }
+            }            
         }
 
         if (/^[-*•]/.test(trimmed)) {
