@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📘 Flashcard Tiếng Anh của bé Đan</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Ứng dụng học từ vựng tiếng Anh theo trình độ B2, C1, C2 dành cho bé Đan.">
+</head>
+
+<body>
+  <h1>📘 Flashcard Tiếng Anh của bé Đan</h1>
+  <div id="stats" style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;"></div> <!-- 🆕 -->
+
+  <!-- 📌 BỘ LỌC -->
+  <div class="filters">
+    <select id="level-filter" onchange="updateTopicFilter()" aria-label="Lọc theo trình độ">
+      <option value="">Trình độ (Tất cả)</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+    <select id="topic-filter" aria-label="Lọc theo chủ đề">
+      <option value="">Chủ đề (Tất cả)</option>
+    </select>
+    <!-- 🆕 Tìm kiếm -->
+    <input type="text" id="search-box" placeholder="🔍 Tìm từ..." oninput="applySearchFilter()">
+  </div>
+
+  <!-- ✏️ THÊM THẺ MỚI -->
+  <div class="form">
+    <input id="front-input" placeholder="Từ..." aria-label="Từ vựng tiếng Anh">
+    <input id="back-input" placeholder="Nghĩa..." aria-label="Nghĩa tiếng Việt">
+    <select id="level-input" onchange="updateTopicOptions()" aria-label="Chọn trình độ">
+      <option value="">Chọn trình độ</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+    <select id="topic-input" aria-label="Chọn chủ đề sẵn có">
+      <option value="">Chọn chủ đề</option>
+    </select>
+    <input id="new-topic" placeholder="(Hoặc thêm chủ đề mới)" aria-label="Nhập chủ đề mới">
+    <button onclick="addCard()" title="Thêm một thẻ mới">➕ Thêm thẻ</button>
+  </div>
+
+  <!-- 📥 THÊM NHIỀU THẺ -->
+  <div class="form" style="flex-direction: column; align-items: center;">
+    <textarea id="bulk-input" placeholder="apple (n) : quả táo&#10;computer : máy tính&#10;..."
+      aria-label="Danh sách từ cần nhập"></textarea>
+    <button onclick="addBulkCards()" title="Thêm nhiều thẻ cùng lúc">➕ Thêm danh sách</button>
+  </div>
+
+  <!-- 🔢 SỐ THẺ -->
+  <div id="counter" class="counter"></div>
+  <div id="favorite-counter" style="font-size: 0.85rem; color: #888;"></div>
+
+  <!-- 🔄 THẺ FLASHCARD -->
+  <div class="flashcard-container" onclick="flipCard()" title="Bấm để lật thẻ">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-inner front" id="card-front">
+        Từ: Hello
+        <span id="favorite-indicator" style="position:absolute; top:8px; right:12px; font-size: 1.2rem;">⭐</span>
+      </div>
+      <div class="flashcard-inner back" id="card-back">Nghĩa: Xin chào</div>
+    </div>
+  </div>
+
+  <!-- ⏮⏭ ĐIỀU KHIỂN -->
+  <div class="controls">
+    <button onclick="prevCard()" title="Xem thẻ trước đó">◀ Trước</button>
+    <button onclick="nextCard()" title="Xem thẻ kế tiếp">Sau ▶</button>
+    <button class="delete-btn" onclick="deleteCard()" title="Xoá thẻ hiện tại">🗑 Xoá</button>
+    <button onclick="toggleFavorite()" title="Đánh dấu yêu thích">⭐</button> <!-- 🆕 -->
+  </div>
+
+  <!-- 🔁 DI CHUYỂN THẺ -->
+  <div class="move-form">
+    <select id="move-level" onchange="updateMoveTopics()" aria-label="Chọn trình độ mới">
+      <option value="">Chuyển sang trình độ...</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+    <select id="move-topic" aria-label="Chọn chủ đề mới">
+      <option value="">Chọn chủ đề...</option>
+    </select>
+    <button onclick="moveCard()" title="Di chuyển thẻ sang chủ đề khác">🔁 Di chuyển</button>
+  </div>
+
+  <!-- 🔊 PHÁT ÂM & NHẬP XUẤT -->
+  <div class="controls">
+    <button onclick="speakCard()" title="Đọc từ vựng">🔊 Phát âm</button>
+    <button onclick="exportCards()" title="Tải xuống thẻ">💾 Xuất JSON</button>
+    <input type="file" id="import-json" style="display:none" onchange="importCards(event)">
+    <button onclick="document.getElementById('import-json').click()" title="Tải lên từ file JSON">📂 Nhập JSON</button>
+    <button onclick="toggleDarkMode()">🌙 Giao diện</button> <!-- 🆕 -->
+  </div>
+
+  <!-- 📜 SCRIPT -->
+  <script src="script.js" defer></script>
+</body>
+
+</html>
