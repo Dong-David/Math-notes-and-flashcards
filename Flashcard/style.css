@@ -1,0 +1,228 @@
+/* ====================================== */
+/* 🌈 BIẾN CHUNG & MÀU GIAO DIỆN MẶC ĐỊNH */
+/* ====================================== */
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --primary: #007bff;
+    --primary-dark: #0056b3;
+    --card-bg: #fff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --radius: 12px;
+}
+
+/* ======================= */
+/* 🎨 GIAO DIỆN CƠ BẢN     */
+/* ======================= */
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 1rem;
+    background: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ======================= */
+/* 🖋️ TIÊU ĐỀ              */
+/* ======================= */
+h1 {
+    font-size: 1.6rem;
+    color: #0066cc;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* ======================= */
+/* 🎛️ CÁC KHỐI GIAO DIỆN  */
+/* ======================= */
+.filters,
+.form,
+.controls,
+.move-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+    justify-content: center;
+    align-items: center;
+}
+
+textarea {
+    width: 100%;
+    max-width: 500px;
+    height: 120px;
+    resize: vertical;
+}
+
+/* ======================= */
+/* 🧩 INPUTS & BUTTONS     */
+/* ======================= */
+input,
+select,
+textarea,
+button {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 3px var(--primary);
+}
+
+button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+button:hover {
+    background-color: var(--primary-dark);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* ======================= */
+/* 🧠 FLASHCARD            */
+/* ======================= */
+.flashcard-container {
+    margin: 1rem 0;
+    perspective: 1000px;
+}
+
+.flashcard {
+    width: 300px;
+    height: 200px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transform-style: preserve-3d;
+    transition: transform 0.7s ease-in-out, scale 0.2s ease-in-out;
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.flashcard:hover {
+    transform: scale(1.01);
+}
+
+.flashcard:active {
+    scale: 0.98;
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg) scale(1.02);
+}
+
+.flashcard-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.front {
+    background-color: #ffffff;
+    color: #222;
+    border-radius: var(--radius);
+}
+
+.back {
+    background-color: #f0f8ff;
+    color: #444;
+    border-radius: var(--radius);
+    transform: rotateY(180deg);
+}
+
+/* ======================= */
+/* ⭐ YÊU THÍCH            */
+/* ======================= */
+#favorite-indicator {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 1.2rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#favorite-indicator:hover {
+    transform: scale(1.2);
+}
+
+/* ======================= */
+/* 🔢 ĐẾM THẺ             */
+/* ======================= */
+#counter {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* ======================= */
+/* 🌙 DARK MODE           */
+/* ======================= */
+body.dark-mode {
+    --bg-color: #1e1e1e;
+    --text-color: #e0e0e0;
+    --card-bg: #2a2a2a;
+    --primary: #00bcd4;
+    --primary-dark: #0097a7;
+}
+
+body.dark-mode .back {
+    background-color: #3a3a3a;
+    color: #ddd;
+}
+
+body.dark-mode .front {
+    background-color: #2a2a2a;
+    color: #eee;
+}
+
+/* ======================= */
+/* 📱 RESPONSIVE          */
+/* ======================= */
+@media (max-width: 600px) {
+
+    .filters,
+    .form,
+    .controls,
+    .move-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .flashcard {
+        width: 90vw;
+        height: 160px;
+    }
+}
